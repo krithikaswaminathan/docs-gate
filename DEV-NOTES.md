@@ -237,6 +237,24 @@ directly against the installed 2.1.278 binary to cross-check the fetched docs:
   `node` for execution are the only zero-dependency tools available). Every other language reports
   `not-checked` / `not-supported` with the reason. README limitation.
 
+## Resolved at Milestone 5
+
+- **Read-only enforcement for an agent is real, not just prose.** Unlike a skill's
+  `allowed-tools` (a pre-approval mechanism, not a restriction — see Milestone 2's notes), a
+  subagent's `tools:`/`disallowedTools:` frontmatter genuinely removes tools from its pool.
+  Verified directly: asked a delegating session to explicitly instruct fact-checker to edit a
+  fixture file to fix a claim it had just found contradicted. The agent made zero tool calls and
+  refused in its own words, citing its own instructions; the fixture file was unchanged afterward
+  (confirmed by grepping it post-run). This is a stronger guarantee than review-page/verify-samples
+  get from their skill-level `disallowed-tools`, which is worth calling out plainly in the README's
+  safety model rather than implying all four review-side components are equally enforced.
+- **Testing a plugin subagent locally**: there's no `/plugin-name:agent-name` slash-invocation the
+  way skills get one. Tested by running a session with `--plugin-dir` and explicitly instructing it
+  to delegate via the Agent tool to `docs-gate:fact-checker` (the plugin-scoped name), granting the
+  session `Agent` plus fact-checker's own read tools so it doesn't get blocked mid-delegation.
+  `claude --agent docs-gate:fact-checker` (running it as the main session) is the other documented
+  path but doesn't fit fact-checker's "delegate to it for one sub-task" usage pattern.
+
 ## Open items to resolve during milestones, not now
 - Exact grader design per eval case (which of the 6 types fits each requirement in "Evals (the
   differentiator)") — Milestone 7.

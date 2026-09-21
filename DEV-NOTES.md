@@ -206,6 +206,37 @@ directly against the installed 2.1.278 binary to cross-check the fetched docs:
   installed will see "markdownlint: not found" even though a markdownlint tool is present. Note
   this as a known limitation in the README at Milestone 8 rather than silently supporting both.
 
+## Resolved at Milestone 4
+
+- **`disallowed-tools` collides with staging a sample to execute.** First cut of
+  `run-sample.mjs` took a file path argument, so the skill had to Write a temp file before running
+  anything — but `verify-samples` sets `disallowed-tools: Write, Edit, NotebookEdit` to keep the
+  review read-only, so the Write was denied and opt-in execution could never work. Caught by an
+  actual end-to-end run, not by the unit tests, which is the argument for testing skills in a real
+  session rather than only testing their scripts. Fix: `run-sample.mjs` reads the sample's code
+  from **stdin** and takes only the language as an argument, so the skill pipes code in via a
+  quoted heredoc and never needs a write tool. Worth remembering for the remaining skills: any
+  read-only skill that needs to hand data to a script must pass it through stdin or argv, never a
+  temp file.
+- **Heredoc delimiter quoting matters.** The skill instructs a quoted delimiter
+  (`<<'DOCS_GATE_SAMPLE'`) so the shell does no expansion on the sample's code — an unquoted
+  delimiter would let `$VAR` and backticks in a documentation sample expand before the code ever
+  reached the script, both corrupting the sample and running shell substitutions from an untrusted
+  page. The skill also tells Claude to pick a different delimiter in the unlikely case a sample
+  contains that exact line.
+- **Execution safety is real but limited.** `run-sample.mjs` runs the sample in a fresh temp dir
+  with `env` reduced to `PATH` (plus `SystemRoot`/`PATHEXT` on Windows), so nothing from the
+  parent shell's environment — API keys, tokens — is visible to the sample; verified directly by
+  running a sample that prints `process.env.SUPER_SECRET_TOKEN` with that var set in the parent
+  (it saw `(not present)`). It also enforces a 10s timeout and truncates output at 10k chars.
+  It does **not** block network access — no dependency-free way to do that here, and the plugin
+  uses no OS-level sandboxing. Hence the skill's separate confirmation step for anything
+  classified `looksNetworkDependent`. Say this plainly in the README's safety model; don't let it
+  read as a sandbox.
+- **JS-only execution** is a deliberate scope limit for this version (`node --check` for syntax,
+  `node` for execution are the only zero-dependency tools available). Every other language reports
+  `not-checked` / `not-supported` with the reason. README limitation.
+
 ## Open items to resolve during milestones, not now
 - Exact grader design per eval case (which of the 6 types fits each requirement in "Evals (the
   differentiator)") — Milestone 7.

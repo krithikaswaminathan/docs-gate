@@ -1,0 +1,24 @@
+{
+  "mainSidebar": [
+    "intro",
+    {
+      "type": "category",
+      "label": "Guides",
+      "items": [
+        "guides/getting-started",
+        "guides/quick_setup",
+        {
+          "type": "category",
+          "label": "Advanced",
+          "items": [
+            {
+              "type": "category",
+              "label": "Tips",
+              "items": ["guides/advanced/tips/nested-page"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

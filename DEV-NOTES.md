@@ -255,6 +255,52 @@ directly against the installed 2.1.278 binary to cross-check the fetched docs:
   `claude --agent docs-gate:fact-checker` (running it as the main session) is the other documented
   path but doesn't fit fact-checker's "delegate to it for one sub-task" usage pattern.
 
+## Resolved at Milestone 6
+
+- **Two real parsing bugs caught by tests, not by inspection:**
+  - `nav-mintlify.mjs`'s "no navigation key" fallback originally treated the whole parsed
+    `docs.json` object as the nav root when there was no `navigation` key, instead of reporting "no
+    navigation found" — meaning a docs.json with unrelated top-level keys (e.g. just `{name: "..."}`)
+    would silently produce one bogus `unknown` entry instead of a clean "not usable" signal.
+    Fixed by explicitly branching on `has "navigation" key` vs `is itself an array` vs `neither`.
+  - `sidebars-js-static.mjs`'s tokenizer had no handling for `(`, `)`, or `;`, so a `require(...)`
+    call failed with a generic "unexpected character" at the *first* paren rather than a message
+    naming the real reason, and text after a semicolon-terminated export (e.g. a following
+    statement) failed the same generic way rather than the intended "unexpected content after the
+    exported value" message. Fixed by giving `(`/`)` a specific "function call syntax" error and
+    treating `;` as a real token so the top-level check can look past it and give a precise message.
+  Both are argued for in the engineering requirements ("tests for extraction and parsing logic")
+  but concretely, neither bug would have been obvious from reading the code — the tokenizer read as
+  correct until the tests exercised the exact failing inputs.
+- **The hand-rolled sidebars.js static parser is intentionally narrow.** It accepts only:
+  object/array literals, strings (quote or backtick, no `${...}` interpolation), numbers,
+  true/false/null, comments, trailing commas. It rejects (falls back to directory tree, never
+  guesses) on: any bare identifier used as a value other than true/false/null (a variable
+  reference), any `(`/`)` (a function call — covers `require(...)` and everything else), and
+  anything left over after the exported value. This is deliberately conservative: "parse
+  statically only if that can be done reliably" is read as "only ever succeed when there is
+  genuinely no dynamic content," not "try to approximate dynamic content." Verified against both a
+  plain object-literal fixture (parses, tier 3) and a `require()`-based fixture (bails to tier 2
+  with a specific reason in `notes`).
+- **Nav parsing tiers, confirmed end-to-end via --plugin-dir against one fixture per tier:**
+  tier 1 (Mintlify docs.json, and separately Docusaurus sidebars.json+_category_.json), tier 2
+  (no config at all), tier 3 (statically-parseable sidebars.js). All four matched their seeded
+  defects exactly (orphan pages, mixed naming, excessive depth, missing expected pages).
+- **Opt-in sidebars.js execution, confirmed end-to-end in both directions**, not just via the
+  script's own CLI: with an explicit confirmation stated up front in the prompt, the skill ran
+  `execute-sidebars.mjs --confirmed` and used the real resolved config (verified the code actually
+  ran via the fixture's deliberate `console.log` side effect, visible in the transcript); without
+  confirmation, the skill correctly stayed on the tier-2 fallback and asked before doing anything,
+  never invoking the execution script on its own initiative.
+- **Mintlify docs.json schema wasn't independently verified.** `nav-mintlify.mjs`'s parser is
+  tolerant/best-effort by design (see its own docstring) because Mintlify's schema is out of scope
+  for this project's Step 0 reading (only Claude Code's own docs were required). State this as a
+  named limitation in the README rather than implying the Mintlify parser is authoritative.
+- **`EXPECTED_PAGE_KEYWORDS` (getting started / troubleshooting / reference) is a fixed, built-in
+  heuristic in `ia-signals.mjs`**, not exposed via `userConfig`. Scoped this way deliberately to
+  keep review-ia's surface area contained; note as a possible future enhancement, not a gap to fix
+  now.
+
 ## Open items to resolve during milestones, not now
 - Exact grader design per eval case (which of the 6 types fits each requirement in "Evals (the
   differentiator)") — Milestone 7.

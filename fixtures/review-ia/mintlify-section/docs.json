@@ -1,0 +1,14 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "SYNTHETIC FIXTURE -- for docs-gate testing only",
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": ["quickstart", "installation"]
+    },
+    {
+      "group": "Guides",
+      "pages": ["guides/setup"]
+    }
+  ]
+}

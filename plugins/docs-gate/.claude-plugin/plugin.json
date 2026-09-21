@@ -12,5 +12,13 @@
     "docs-as-code",
     "technical-writing",
     "review"
-  ]
+  ],
+  "userConfig": {
+    "docs_root": {
+      "type": "string",
+      "title": "Docs root",
+      "description": "Path, relative to the project root, that the PostToolUse lint hook is scoped to. Markdown/MDX edits outside this path are not linted.",
+      "default": "docs"
+    }
+  }
 }

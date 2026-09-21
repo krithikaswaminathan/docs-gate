@@ -181,11 +181,32 @@ directly against the installed 2.1.278 binary to cross-check the fetched docs:
   (mentions `evals/` default dir, `case.yaml`/`prompt.md` + `graders/*.md`, `--trust-plugin`,
   no-plugin baseline arm, sandboxing caveat).
 
+## Resolved at Milestone 3
+
+- **PostToolUse JSON output shape**, confirmed with a focused fetch of hooks.md: use
+  `{"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": "..."}}`.
+  `additionalContext` on PostToolUse reaches **Claude only** (added to context), not shown
+  directly to the user in the transcript — PostToolUse is not in the small list of events
+  (`UserPromptSubmit`, `UserPromptExpansion`, `SessionStart`, `PostModelSwitch`) where plain stdout
+  is shown to Claude either; for those, plain text works too, but we use the same JSON shape on
+  both hooks for consistency. Confirmed end-to-end: after a real Write to a file under `docs/`,
+  Claude correctly reported "neither check ran" (Vale/markdownlint absent) — the injected context
+  reached it.
+- **Windows `.cmd` shim resolution**: `spawnSync("vale", ...)` without `shell: true` won't find a
+  globally-installed npm CLI tool on Windows, since those install as `.cmd` shims. Didn't want
+  `shell: true` (a file path from `tool_input.file_path` could contain shell metacharacters, and
+  the "no shell command strings" rule exists for exactly this reason), so `lib/external-tools.mjs`
+  retries once with a `.cmd` suffix on `win32`, still via `spawnSync`'s argument array, never a
+  shell. Untested on an actual Windows machine — flag this as a real gap for Milestone 8's
+  clean-install pass if a Windows environment becomes available; otherwise document it as an
+  unverified-on-Windows limitation in the README.
+- **`markdownlint` vs `markdownlint-cli2`**: the prompt names "markdownlint" singular, so
+  `check-environment.mjs`/`lint-changed-file.mjs` only look for the `markdownlint` binary
+  (from `markdownlint-cli`), not `markdownlint-cli2`. Someone with only `markdownlint-cli2`
+  installed will see "markdownlint: not found" even though a markdownlint tool is present. Note
+  this as a known limitation in the README at Milestone 8 rather than silently supporting both.
+
 ## Open items to resolve during milestones, not now
-- Exact PostToolUse JSON output shape for feeding lint findings back to Claude — verify against
-  the hooks reference page's PostToolUse section at Milestone 3 (only skimmed hooks-guide.md in
-  depth; hooks.md's full per-event JSON schemas is a longer page worth a second, focused fetch
-  when we write hooks/hooks.json).
 - Exact grader design per eval case (which of the 6 types fits each requirement in "Evals (the
   differentiator)") — Milestone 7.
 - Node minimum-supported version statement for the README — pick current LTS at Milestone 8.

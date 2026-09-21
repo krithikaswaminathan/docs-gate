@@ -1,0 +1,16 @@
+{
+  "name": "docs-gate",
+  "displayName": "docs-gate",
+  "version": "0.1.0",
+  "description": "Reviews, verifies, and reports on Markdown/MDX documentation pages in docs-as-code repos (Docusaurus, Mintlify). Never edits docs on its own.",
+  "author": {
+    "name": "Krithika Swaminathan"
+  },
+  "license": "MIT",
+  "keywords": [
+    "documentation",
+    "docs-as-code",
+    "technical-writing",
+    "review"
+  ]
+}

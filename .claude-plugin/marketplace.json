@@ -1,0 +1,26 @@
+{
+  "name": "docs-gate-marketplace",
+  "description": "Marketplace for docs-gate, a documentation quality review plugin for docs-as-code repos.",
+  "owner": {
+    "name": "Krithika Swaminathan"
+  },
+  "plugins": [
+    {
+      "name": "docs-gate",
+      "source": "./plugins/docs-gate",
+      "description": "Reviews, verifies, and reports on Markdown/MDX documentation pages. Never edits docs on its own.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Krithika Swaminathan"
+      },
+      "license": "MIT",
+      "category": "documentation",
+      "keywords": [
+        "documentation",
+        "docs-as-code",
+        "technical-writing",
+        "review"
+      ]
+    }
+  ]
+}

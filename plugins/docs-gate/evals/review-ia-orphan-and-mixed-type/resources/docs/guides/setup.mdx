@@ -1,0 +1,32 @@
+<!-- SYNTHETIC FIXTURE: written for docs-gate eval testing only.
+     Deliberately mixes content types: starts as a how-to (numbered
+     setup steps) then drifts into unrelated explanation-type material
+     about the system's internal architecture and design history,
+     which doesn't belong in a how-to guide. -->
+
+# Setting up the Widget SDK
+
+Follow these steps to configure the SDK for your project.
+
+## Step 1: Install the package
+
+```bash
+npm install @widget/sdk
+```
+
+## Step 2: Set your API key
+
+```bash
+export WIDGET_API_KEY="your-key-here"
+```
+
+## Why the SDK is built this way
+
+The Widget SDK was originally built as an internal tool in 2019, before being open-sourced. Its
+architecture favors a single global client instance over per-request clients because early
+internal users found connection pooling confusing. The client maintains a persistent WebSocket
+connection under the hood, multiplexing all API calls over it rather than using individual HTTP
+requests, a design choice inherited from the original real-time dashboard product the SDK was
+extracted from. This is why the SDK requires a long-lived process rather than working well in
+serverless environments, a limitation the team has discussed removing in a future major version
+but has not prioritized given current customer usage patterns.

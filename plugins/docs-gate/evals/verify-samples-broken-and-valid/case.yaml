@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: verify-samples-broken-and-valid
+tags: [verify-samples]
+context:
+  scaffold_script: fixture.sh
+  add_dirs: [resources]

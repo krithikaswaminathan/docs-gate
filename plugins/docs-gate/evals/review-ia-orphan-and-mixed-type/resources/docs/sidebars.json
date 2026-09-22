@@ -1,0 +1,3 @@
+{
+  "main": ["intro", { "type": "category", "label": "Guides", "items": ["guides/setup"] }]
+}

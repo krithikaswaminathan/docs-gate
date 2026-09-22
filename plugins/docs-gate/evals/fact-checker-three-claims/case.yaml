@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: fact-checker-three-claims
+tags: [fact-checker]
+context:
+  scaffold_script: fixture.sh
+  add_dirs: [resources]

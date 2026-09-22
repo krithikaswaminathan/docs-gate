@@ -366,8 +366,41 @@ directly against the installed 2.1.278 binary to cross-check the fetched docs:
   what CI and local runs should use; note this in the README's "running tests" instructions instead
   of the bare-directory form the engineering requirements' prose implies.
 
+## Resolved at Milestone 8
+
+- **`claude plugin validate` needs no authentication** (confirmed via a docs fetch, not just
+  inference) — pure structural check, no model calls, so CI's `validate.yml` just needs
+  `npm install -g @anthropic-ai/claude-code` and no secret. `claude plugin eval` is the opposite:
+  needs `ANTHROPIC_API_KEY` (or equivalent) in the environment, real model usage, so `eval.yml` is
+  `workflow_dispatch`-only with the key read from a repo secret the user has to add themselves —
+  documented as such rather than assumed configured.
+- **The two marketplace-add forms are NOT equivalent** — confirmed directly, not assumed. `claude
+  plugin marketplace add <path>` (CLI form) works non-interactively; tested end-to-end into a
+  throwaway `/tmp` directory (add marketplace → install → `claude plugin list` shows it enabled →
+  `claude plugin validate` passes for both the plugin and the marketplace manifest → uninstall →
+  remove marketplace). `/plugin marketplace add <path>` (slash form) is interactive-only: tried
+  under `claude -p` and got `"/plugin isn't available in this environment"` rather than running.
+  README says to use the CLI form for scripts/CI and either form in an interactive session.
+- **Process note, not a technical finding**: the clean-install test's first step
+  (`claude plugin marketplace add`) registered the marketplace in **user-scope** settings
+  (`declared in user settings`) before it was clear that would happen — a global settings change
+  that CLAUDE.md's ground rules say to ask about first. Fully reverted immediately after
+  (`marketplace remove`, confirmed via `marketplace list` showing only the pre-existing
+  `claude-plugins-official` entry) and disclosed to the user, but the ask-first step should have
+  come before running the command, not after. Worth remembering: `claude plugin marketplace add`
+  is a global-settings-touching command even when only being used for a "clean directory" test, not
+  just when a user explicitly wants to keep the marketplace registered.
+- **CI runs `--scaffold`** in `eval.yml` since every `fixture.sh` in this repo's `evals/` was
+  authored by this project, not by an untrusted third-party plugin — consistent with the CLI's own
+  "only use `--scaffold` on case files you authored" warning.
+- Node minimum-supported version for the README: **Node 20 LTS**, the oldest version where
+  `node:test`, `node:assert/strict`, and `util.parseArgs` are all stable (not experimental) — the
+  actual constraint, rather than just picking whatever LTS happens to be current when this was
+  written (Node 25.6.1 was the dev machine's installed version, well past 20, but nothing in the
+  scripts requires anything newer than 20).
+
 ## Open items to resolve during milestones, not now
-- Node minimum-supported version statement for the README — pick current LTS at Milestone 8.
-- Confirm both marketplace-add command forms (`/plugin marketplace add` vs
-  `claude plugin marketplace add`) actually work identically for a local path when we do the
-  clean-install test at Milestone 8.
+(none remaining from the original milestone list — see "Definition of done" in the project prompt
+for what's left to confirm only once the repo has a real GitHub remote: e.g. the marketplace `add`
+command against an actual GitHub URL rather than a local path, which this dev environment can't
+exercise without pushing the repo first.)

@@ -1,0 +1,31 @@
+name: Validate
+
+# Structural checks only: manifest/schema validation and the script test suite.
+# No model calls, no credentials needed -- see docs-gate-claude-code-prompt.md's
+# working agreement to run evals only on manual trigger (eval.yml), never here.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Validate marketplace manifest
+        run: claude plugin validate . --strict
+
+      - name: Validate plugin manifest
+        run: claude plugin validate ./plugins/docs-gate --strict
+
+      - name: Run script tests
+        run: node --test tests/scripts/*.test.mjs

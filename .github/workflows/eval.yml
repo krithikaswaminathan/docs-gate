@@ -1,0 +1,49 @@
+name: Eval
+
+# Manual trigger ONLY. Every run is real model usage billed to whichever
+# ANTHROPIC_API_KEY secret this repo has configured -- see the working
+# agreement ("tell me the estimated cost before running any eval suite") and
+# CLAUDE.md. --max-cost-usd is a hard ceiling, not a substitute for knowing
+# the cost before you click Run.
+on:
+  workflow_dispatch:
+    inputs:
+      max_cost_usd:
+        description: "Hard cost ceiling in USD for this run"
+        required: false
+        default: "10"
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run eval suite
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude plugin eval ./plugins/docs-gate \
+            --trust-plugin \
+            --scaffold \
+            --json results.json \
+            --model claude-sonnet-5 \
+            --judge-model claude-haiku-4-5 \
+            --no-publish \
+            --max-cost-usd "${{ inputs.max_cost_usd }}"
+
+      - name: Upload eval results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: |
+            results.json
+            plugins/docs-gate/evals/results/

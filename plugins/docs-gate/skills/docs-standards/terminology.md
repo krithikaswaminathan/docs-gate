@@ -1,18 +1,22 @@
 # Terminology
 
-> **STARTER: author to replace.** Empty placeholder table so `review-page` has something to check
-> terminology consistency against. Populate it with this docs set's real preferred/banned terms
-> and product/feature names before treating terminology findings as meaningful.
+> **Per-install template.** docs-gate reviews whatever docs set it's pointed at, so there's no
+> fixed glossary to ship — each installing team populates these tables for their own docs set. The
+> row below each table is a labeled example showing the expected format, not a real entry; replace
+> it (don't just add to it) with this docs set's actual terms before treating terminology findings
+> as fully meaningful. Even with these tables empty, `review-page` and `review-ia` still flag two
+> different terms used for one clearly identical concept on a page — see "How review-page uses this
+> file" below.
 
 | Preferred term | Don't use | Notes |
 | :-------------- | :--------- | :---- |
-| TODO | TODO | TODO |
+| _example:_ sign in | log in, login (as a verb) | "Log in" mixes verb/noun forms; "sign in" stays a verb consistently. |
 
 ## Product and feature names
 
 | Correct form | Common mistakes | Notes |
 | :------------ | :---------------- | :---- |
-| TODO | TODO | TODO |
+| _example:_ GitHub | Github, github | Match the vendor's own casing exactly (see style-guide.md). |
 
 ## How review-page uses this file
 

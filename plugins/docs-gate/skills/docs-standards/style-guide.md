@@ -1,7 +1,8 @@
 # Style guide
 
-> **Status: in progress.** The rules below reflect real editorial judgment. Sections still marked
-> `TODO` haven't been decided yet — fill them in before relying on the plugin's judgment there.
+> **Status: decided**, with one open item: [Phrasing to avoid](#phrasing-to-avoid) is still the
+> generic starter list, not yet confirmed against real editorial judgment — revisit it if any
+> entry turns out to be wrong. Everything else below is a real decision, not a placeholder.
 
 ## Severity model
 Every finding gets one of three severities:
@@ -10,12 +11,22 @@ Every finding gets one of three severities:
 - **Nice-to-have** — polish, lowest priority.
 
 ## Voice
-- TODO: second person ("you") vs. imperative vs. first-person-plural — pick one and state
-  exceptions.
+- **Imperative mood, not literal second person.** Instructions read as commands: "Click Save," not
+  "You should click Save" or "You can click Save." This is the same example the active-voice
+  section below already uses — imperative and active voice go together here, so there's nothing
+  extra to reconcile between the two sections.
+- **Exception:** an Explanation-type page, or a tolerated "why" aside inside a how-to (rubric
+  dimension 2), may use "you" more conversationally ("you might wonder why…") since it isn't
+  issuing an instruction.
 
 ## Tense
-- TODO: present tense for described behavior is a common default; state whether this docs set
-  follows that and how to handle async/eventual behavior.
+- **Present tense for current, described behavior:** "The API returns a 404," not "The API will
+  return a 404."
+- **Future tense is allowed specifically for behavior that hasn't happened yet** at the point being
+  described — a later step in a sequence, or an async callback: "the callback fires once the
+  upload completes" is fine as present tense, but "once you start the job, results will appear in
+  the dashboard a few minutes later" is a legitimate future, not a violation. Don't force present
+  tense onto something the page itself is describing as happening later.
 
 ## Structure
 - **A heading must never be immediately followed by another heading.** At least one sentence of
@@ -35,8 +46,8 @@ Every finding gets one of three severities:
   break them up rather than trying to punctuate around the problem. — **Blocker**
 
 ## Voice: active vs. passive
-- **Default to active voice.** Address the reader directly as "you" for instructions
-  ("Click Save," not "The Save button should be clicked").
+- **Default to active, imperative voice** for instructions ("Click Save," not "The Save button
+  should be clicked") — see [Voice](#voice) above for the full rule and its exception.
 - **Flag every instance of passive voice**, even when it might be defensible (e.g., the actor
   genuinely doesn't matter, as in "The request is validated before processing"). Always flag it
   and let the writer decide whether the passive construction is justified in that instance,
@@ -49,10 +60,28 @@ voice — revisit if any of these turn out to be wrong for you.
   simple for the reader.
 - "obviously" / "clearly" — signals the writer assumes shared context the reader may not have.
 
-## TODO
-- Voice and tense (above).
-- Abbreviations/acronyms on first use.
-- Capitalization of product/feature names.
-- Oxford comma.
-- Number formatting.
-- Anything specific to this docs set's brand voice.
+## Abbreviations and acronyms
+- **Spell out on first use, per page:** "Information Architecture (IA)" the first time it appears
+  on a page, acronym alone after that. Each page is checked on its own — don't assume the reader
+  already read an earlier page in the section.
+
+## Capitalization of product and feature names
+- **Match the vendor's or product's own casing exactly** (`GitHub`, `macOS`, `iPhone`), not a
+  house style. This is inherently per-docs-set — there's no fixed list docs-gate can ship, the same
+  way there's no fixed terminology list (see rubric dimension 5). At minimum, flag a page that's
+  inconsistent with *itself* (two different castings of the same name); check against
+  [terminology.md](terminology.md)'s product-names table once an install has populated it.
+
+## Oxford comma
+- **Yes, always:** "reads, writes, and deletes," not "reads, writes and deletes."
+
+## Number formatting
+- **Ordinary prose:** spell out one through nine; use numerals from 10 up.
+- **Anything technical — versions, counts, limits, ports, timeouts — always gets numerals**,
+  regardless of magnitude: "3 retries," not "three retries," even though 3 falls under the prose
+  rule above. The technical case wins when the two rules would disagree.
+
+## Brand voice
+- No fixed brand voice, for the same reason there's no fixed terminology or capitalization list:
+  docs-gate reviews whatever docs set it's pointed at, each with its own voice. This is a
+  per-install concern, not a base style-guide rule — nothing to check here at the base level.

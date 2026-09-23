@@ -3,11 +3,14 @@ name: docs-standards
 description: Background knowledge for docs-gate — the rubric, style guide, terminology list, and content-type (Diataxis) definitions the review skills apply. Use when you need to know what "good documentation" means for this plugin, when a review skill asks you to apply the rubric, or when asked what docs-gate's standards are.
 ---
 
-> **Status: mixed.** [rubric.md](rubric.md) and [style-guide.md](style-guide.md) reflect real
-> editorial judgment, though each still has individual `TODO`s left to fill in.
-> [terminology.md](terminology.md) is still a placeholder end to end — populate it before treating
-> terminology findings as meaningful. [diataxis.md](diataxis.md) is a plain summary of the public
-> Diataxis framework, kept as-is unless this docs set uses different categories.
+> **Status: mixed.** [rubric.md](rubric.md) and [style-guide.md](style-guide.md) are decided (each
+> has one deliberately open item: rubric.md's dimensions 5 and 8 point at per-install concerns
+> rather than fixed answers, and style-guide.md's "Phrasing to avoid" list is still unconfirmed
+> starter content). [terminology.md](terminology.md) is a per-install template by design — docs-gate
+> targets any docs set, so there's no fixed glossary to ship; populate it for a specific docs set
+> before treating terminology findings as fully meaningful. [diataxis.md](diataxis.md) is a plain
+> summary of the public Diataxis framework, kept as-is unless this docs set uses different
+> categories.
 
 # docs-standards
 

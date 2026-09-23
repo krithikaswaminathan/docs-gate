@@ -18,10 +18,15 @@ that triggered the finding — never a bare "the terminology dimension failed."
   tutorial doesn't drift into reference material, a reference page doesn't narrate a workflow.
 - TODO: name any locally-tolerated exceptions (e.g., a short "why" aside inside a how-to).
 
-## 3. Requirements section (tutorials and setup pages)
-Any tutorial or setup-style page — a page that walks the reader through configuring or connecting
-something, not a reference or conceptual page — needs a `## Requirements` section with three
-named subsections, stated up front rather than left for the reader to discover mid-task:
+## 3. Requirements section (connector pages)
+This dimension applies only to a page that walks the reader through connecting to an external
+service, account, or integration — a **connector page**. A tutorial, how-to, or setup page that
+doesn't connect the reader to anything external (a purely local walkthrough, a conceptual page, a
+reference page) doesn't need this section at all: don't apply this dimension to it, and don't
+report a finding for its absence, not even a Nice-to-have. Not-a-connector-page means don't block.
+
+A connector page needs a `## Requirements` section with three named subsections, stated up front
+rather than left for the reader to discover mid-task:
 
 - **Technical** — software versions, environment setup, dependencies the reader must already
   have. Missing this subsection: **Should-fix** (an inconvenience; the reader can often recover
@@ -33,9 +38,11 @@ named subsections, stated up front rather than left for the reader to discover m
   Missing this subsection: **Blocker** (the reader can get silently locked out mid-setup with no
   explanation of why).
 
-This pattern generalizes beyond any one docs set: most setup-page failures trace back to one of
-these three gaps, so it's worth checking even on a docs set that doesn't yet use this exact
-heading convention — flag the gap and suggest the convention rather than skipping the check.
+This pattern generalizes beyond any one docs set: most connector-page failures trace back to one
+of these three gaps, so it's worth checking even on a docs set that doesn't yet use this exact
+heading convention — flag the gap and suggest the convention rather than skipping the check. But
+the gate is real: confirm the page is a connector page first, and if it isn't, this dimension is
+not assessed, not passed.
 
 ## 4. Steps complete and ordered
 - Every step in a sequence is present, in the order a reader must perform them, with no skipped

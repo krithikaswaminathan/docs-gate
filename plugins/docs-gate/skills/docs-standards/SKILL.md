@@ -22,7 +22,7 @@ one:
 
 1. Audience fit
 2. Content-type consistency (tutorial, how-to, reference, explanation — see [diataxis.md](diataxis.md))
-3. Requirements section (tutorials and setup pages) — technical, credential, and permissions
+3. Requirements section (connector pages only) — technical, credential, and permissions
 4. Steps complete and ordered
 5. Terminology consistency (see [terminology.md](terminology.md))
 6. Code samples labeled, complete, and verifiable

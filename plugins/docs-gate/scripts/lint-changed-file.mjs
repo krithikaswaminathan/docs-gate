@@ -16,8 +16,14 @@
  * Exit codes: always 0 -- this hook never blocks or undoes the edit.
  */
 
-import { runTool } from "./lib/external-tools.mjs";
+import { runTool, runVale } from "./lib/external-tools.mjs";
 import { isMarkdownFile, isWithinDocsRoot } from "./lib/docs-path.mjs";
+
+function formatValeFindings(findings) {
+  return findings
+    .map((f) => `- line ${f.Line ?? "?"}: [${f.Severity ?? "?"}] ${f.Message ?? ""} (${f.Check ?? "?"})`)
+    .join("\n");
+}
 
 function readStdin() {
   return new Promise((resolve, reject) => {
@@ -55,11 +61,18 @@ async function main() {
     return;
   }
 
-  const vale = runTool("vale", [filePath]);
+  const vale = runVale(filePath);
   const markdownlint = runTool("markdownlint", [filePath]);
 
   const sections = [];
-  if (vale.available && vale.output) sections.push(`Vale:\n${vale.output}`);
+  // vale.error means Vale ran but couldn't actually lint (most commonly: no
+  // .vale.ini, which docs-gate never ships) -- that's not a documentation
+  // defect, so it stays out of per-edit noise the same as "found nothing."
+  // check-environment.mjs's SessionStart report is where an unconfigured
+  // Vale gets surfaced instead.
+  if (vale.available && vale.findings && vale.findings.length > 0) {
+    sections.push(`Vale:\n${formatValeFindings(vale.findings)}`);
+  }
   if (markdownlint.available && markdownlint.output) {
     sections.push(`markdownlint:\n${markdownlint.output}`);
   }

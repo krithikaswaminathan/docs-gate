@@ -3,8 +3,11 @@ name: docs-standards
 description: Background knowledge for docs-gate — the rubric, style guide, terminology list, and content-type (Diataxis) definitions the review skills apply. Use when you need to know what "good documentation" means for this plugin, when a review skill asks you to apply the rubric, or when asked what docs-gate's standards are.
 ---
 
-> **STARTER: author to replace.** Everything this skill points to is a placeholder so the plugin
-> works end to end. It is not anyone's real editorial standard. Do not present it as one.
+> **Status: mixed.** [rubric.md](rubric.md) and [style-guide.md](style-guide.md) reflect real
+> editorial judgment, though each still has individual `TODO`s left to fill in.
+> [terminology.md](terminology.md) is still a placeholder end to end — populate it before treating
+> terminology findings as meaningful. [diataxis.md](diataxis.md) is a plain summary of the public
+> Diataxis framework, kept as-is unless this docs set uses different categories.
 
 # docs-standards
 
@@ -14,18 +17,19 @@ material, loaded on demand rather than kept in context every turn.
 
 ## Rubric dimensions
 
-A page is judged on these nine dimensions. See [rubric.md](rubric.md) for the STARTER criteria
-under each one:
+A page is judged on these ten dimensions. See [rubric.md](rubric.md) for the criteria under each
+one:
 
 1. Audience fit
 2. Content-type consistency (tutorial, how-to, reference, explanation — see [diataxis.md](diataxis.md))
-3. Prerequisites and outcomes stated
+3. Requirements section (tutorials and setup pages) — technical, credential, and permissions
 4. Steps complete and ordered
 5. Terminology consistency (see [terminology.md](terminology.md))
 6. Code samples labeled, complete, and verifiable
 7. Links and cross-references
 8. Scannability
 9. Factual claims that need verification
+10. Judgment calls without a mechanical check
 
 ## Reference files
 

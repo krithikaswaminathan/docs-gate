@@ -27,7 +27,7 @@ None of these edit files. Suggested fixes appear only in reports.
 **Add the marketplace, then install the plugin:**
 
 ```bash
-claude plugin marketplace add https://github.com/<you>/docs-gate
+claude plugin marketplace add https://github.com/krithikaswaminathan/docs-gate
 claude plugin install docs-gate@docs-gate-marketplace
 ```
 
